@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package v1;
+option go_package = "github.com/bhojpur/maps/pkg/api/v1";
+import "maps.proto";
+
+message ListGeospatialSpecsRequest{}
+
+message ListGeospatialSpecsResponse {
+    Repository repo = 1;
+    string name = 2;
+    string path = 3;
+    string description = 4;
+    repeated DesiredAnnotation arguments = 5;
+}
+
+// DesiredAnnotation describes an annotation a Geospatial should have
+message DesiredAnnotation {
+    string name = 1;
+    bool required = 2;
+    string description = 3;
+}
+
+message IsReadOnlyRequest {}
+
+message IsReadOnlyResponse {
+    bool readonly = 1;
+}
+
+// MapsUI offers services intended for the Bhojpur Maps web user interface
+service MapsUI {
+    // ListGeospatialSpecs returns a list of Geospatial that can be started through the UI.
+    rpc ListGeospatialSpecs(ListGeospatialSpecsRequest) returns (stream ListGeospatialSpecsResponse) {};
+
+    // IsReadOnly returns true if the UI is readonly.
+    rpc IsReadOnly(IsReadOnlyRequest) returns (IsReadOnlyResponse) {};
+}
